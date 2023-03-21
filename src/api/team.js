@@ -7,3 +7,11 @@ export function getTeamList(data) {
     data
   })
 }
+
+export function getTeamListByPage(data) {
+  return request({
+    url: '/team/getTeamListByPage',
+    method: 'post',
+    data
+  })
+}

@@ -1,70 +1,56 @@
 <template>
-  <div class="login-container">
-    <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-      auto-complete="on"
-      label-position="left"
-    >
-      <div class="title-container">
-        <h3 class="title">登录账号</h3>
+  <div style="display: flex;height: 100%">
+    <div class="friend-log">
+      <div style="display: flex">
+        <img src="@/assets/imgs/logo.png" alt="" width="40px" height="40px" />
+        <div class="d1">
+          找一个志同道合的朋友
+        </div>
       </div>
-
-      <el-form-item prop="userAccount">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="userAccount"
-          v-model="loginForm.userAccount"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
-      </el-form-item>
-
-      <el-form-item prop="userPassword">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="userPassword"
-          v-model="loginForm.userPassword"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon
-            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-          />
-        </span>
-      </el-form-item>
-      <div display:inline>
-        <el-button
-          :loading="loading"
-          type="primary"
-          style="width: 40%; margin-bottom: 30px"
-          @click.native.prevent="handleLogin"
-          >登录账号</el-button
-        >
-        <el-button
-          :loading="loading"
-          type="primary"
-          style="width: 40%; margin-bottom: 30px"
-          @click="register"
-          >注册账号</el-button
-        >
+      <div>
+        <img src="@/assets/imgs/friends.svg" class="friend-style" />
+        <div style="text-align:center;font-weight: bold;">
+          欢迎来到找伙伴！
+        </div>
+        <div style="font-weight:normal;text-align:center;">
+          希望你能在这里找到很多好伙伴
+        </div>
       </div>
-    </el-form>
+    </div>
+    <div class="login-container">
+      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on"
+        label-position="left">
+        <div class="title-container">
+          <h3 class="title">登录账号</h3>
+        </div>
+
+        <el-form-item prop="userAccount">
+          <span class="svg-container">
+            <svg-icon icon-class="user" />
+          </span>
+          <el-input ref="userAccount" v-model="loginForm.userAccount" placeholder="Username" name="username" type="text"
+            tabindex="1" auto-complete="on" />
+        </el-form-item>
+
+        <el-form-item prop="userPassword">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input :key="passwordType" ref="userPassword" v-model="loginForm.userPassword" :type="passwordType"
+            placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
+        </el-form-item>
+        <div display:inline>
+          <el-button :loading="loading" type="primary" style="width: 40%; margin-bottom: 30px"
+            @click.native.prevent="handleLogin">登录账号</el-button>
+          <el-button :loading="loading" type="primary" style="width: 40%; margin-bottom: 30px" @click="register">注册账号
+          </el-button>
+        </div>
+      </el-form>
+    </div>
+
   </div>
 </template>
 
@@ -148,7 +134,7 @@ export default {
   computed: {
     ...mapState('user', ['token', 'name'])
   },
-  mounted() {}
+  mounted() { }
 }
 </script>
 
@@ -163,6 +149,7 @@ $cursor: #fff;
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
     color: $cursor;
+    height: 100%;
   }
 }
 
@@ -196,6 +183,25 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
+}
+
+.friend-style {
+  widows: 600px;
+  height: 600px;
+  margin-right: 10px;
+}
+
+.friend-log {
+  width: 50%;
+  height: 100%;
+  color: #283443;
+}
+
+.d1 {
+  margin-top: 11px;
+  margin-left: 15px;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 </style>
 

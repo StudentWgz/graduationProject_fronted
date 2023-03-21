@@ -1,45 +1,22 @@
 <template>
-  <div>
-    <el-form
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-      class="demo-ruleForm"
-    >
+  <div style="margin-top:150px">
+    <p style="text-align:center;color:aquamarine;font-size:2em">注册</p>
+    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用户昵称" prop="username">
-        <el-input
-          type="username"
-          v-model="ruleForm.username"
-          autocomplete="off"
-        ></el-input>
+        <el-input type="username" v-model="ruleForm.username" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="账号" prop="account">
-        <el-input
-          type="account"
-          v-model="ruleForm.account"
-          autocomplete="off"
-        ></el-input>
+        <el-input type="account" v-model="ruleForm.account" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input
-          type="password"
-          v-model="ruleForm.password"
-          autocomplete="off"
-        ></el-input>
+        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
-        <el-input
-          type="password"
-          v-model="ruleForm.checkPass"
-          autocomplete="off"
-        ></el-input>
+        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')"
-          >提交</el-button
-        >
+      <router-link to="/login" style="margin-top:15px;margin-bottom: 15px;color:aqua">已有账号？去登录</router-link>
+      <el-form-item style="margin-top:15px">
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -101,10 +78,10 @@ export default {
     }
     return {
       ruleForm: {
-        username: '张三丰',
-        account: '13479205520',
-        password: '123456',
-        checkPass: '123456'
+        username: '',
+        account: '',
+        password: '',
+        checkPass: ''
       },
       rules: {
         username: [{ validator: checkUsername, trigger: 'blur' }],
@@ -135,4 +112,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.el-form {
+  top: -15px;
+  margin-left: 35%;
+}
+
+.el-input {
+  width: 35%;
+}
+</style>

@@ -18,7 +18,7 @@ export function register(data) {
 
 export function showUserById(id) {
   return request({
-    url: '/user/info/'+id,
+    url: '/user/info/' + id,
     method: 'get',
   })
 }
@@ -35,5 +35,13 @@ export function logout() {
   return request({
     url: '/user/logout',
     method: 'post'
+  })
+}
+
+export function userListByPage(data) {
+  return request({
+    url: '/user/userListByPage',
+    method: 'post',
+    data
   })
 }
