@@ -1,21 +1,13 @@
 <template>
   <div class="header">
     <div style="width: 250px">
-      <i class="el-icon-user-solid" style="margin-top: 20px"
-        >找伙伴,找一个志同相合的伙伴</i
-      >
+      <i class="el-icon-user-solid" style="margin-top: 20px">找伙伴,找一个志同相合的伙伴</i>
     </div>
     <div class="left-content">
       <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="searchFriend"
-          ><i class="el-icon-reading"></i>找伙伴</el-menu-item
-        >
-        <el-menu-item index="searchParent"
-          ><i class="el-icon-connection"></i>找队伍</el-menu-item
-        >
-        <el-menu-item index="chat"
-          ><i class="el-icon-chat-line-round"></i>聊天室</el-menu-item
-        >
+        <el-menu-item index="searchFriend"><i class="el-icon-reading"></i>找伙伴</el-menu-item>
+        <el-menu-item index="searchTeam"><i class="el-icon-connection"></i>找队伍</el-menu-item>
+        <el-menu-item index="chat"><i class="el-icon-chat-line-round"></i>聊天室</el-menu-item>
       </el-menu>
       <div class="line"></div>
     </div>
@@ -29,8 +21,8 @@
         </span>
         <span>{{ userName }}</span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>我的信息</el-dropdown-item>
-          <el-dropdown-item>好友列表</el-dropdown-item>
+          <el-dropdown-item command="a">我的信息</el-dropdown-item>
+          <el-dropdown-item command="b">好友列表</el-dropdown-item>
           <el-dropdown-item command="c">后台管理</el-dropdown-item>
           <el-dropdown-item command="d">退出登录</el-dropdown-item>
         </el-dropdown-menu>
@@ -55,6 +47,14 @@ export default {
       console.log('点击')
     },
     async handleCommand(command) {
+      if (command === 'a') {
+        this.$router.push({ path: '/myinfomation' })
+        this.$message('click on item ' + command)
+      }
+      if (command === 'b') {
+        this.$router.push({ path: '/myfriendlist' })
+        this.$message('click on item ' + command)
+      }
       if (command === 'c') {
         this.$router.push({ path: '/example' })
         this.$message('click on item ' + command)
@@ -80,6 +80,7 @@ export default {
   margin-top: 10px;
   margin-right: 40px;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -87,9 +88,11 @@ export default {
   .right-content {
     display: flex;
   }
+
   .left-content {
     display: flex;
   }
+
   .user-avatar {
     cursor: pointer;
     width: 40px;

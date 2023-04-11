@@ -25,6 +25,7 @@
 
 <script>
 import { register } from '@/api/user.js'
+import { md5 } from '@/utils/md5'
 
 export default {
   name: 'Register',
@@ -93,11 +94,14 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      register(this.ruleForm)
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           console.log('进入方法')
-          const resp = await register(this.ruleForm)
+          const resp = await register({
+            username: this.ruleForm.username,
+            account: this.ruleForm.account,
+            password: md5(this.ruleForm.password)
+          })
           alert('注册成功!' + resp)
         } else {
           console.log('error submit!!')

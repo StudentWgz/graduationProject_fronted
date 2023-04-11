@@ -56,9 +56,8 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { showUserById } from '@/api/user'
 import { mapActions, mapState } from 'vuex'
-import { async } from 'q'
+import { md5 } from '@/utils/md5'
 
 export default {
   name: 'Login',
@@ -118,14 +117,9 @@ export default {
     async handleLogin() {
       const resp = await this.login({
         username: this.loginForm.userAccount,
-        password: this.loginForm.userPassword
+        password: md5(this.loginForm.userPassword)
       })
       this.$router.push({ path: '/dashboard' })
-    },
-    async showUserInfo() {
-      const resp = await showUserById(1)
-      this.$router.push({ path: 'example' })
-      console.log(resp)
     },
     register() {
       this.$router.push('/register')

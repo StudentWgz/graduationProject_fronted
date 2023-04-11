@@ -25,17 +25,17 @@
         <el-main class="main">
           <el-input placeholder="搜索感兴趣的人吧！" v-model="input" clearable style="width:25%;margin-bottom:2%">
           </el-input>
-          <el-button style="margin-left: 20px" type="primary" @click="initUser">主要按钮</el-button>
+          <el-button style="margin-left: 20px" type="primary" @click="initUser">搜索</el-button>
           <div style="display: inline">
             <div style="width: 150px height:250px">
               <el-row>
                 <el-col :span="8" v-for="(o, index) in this.list" :key="index" margin-right="12px">
                   <el-card :body-style="{ padding: '0px' }" style="
-                                                                                                width: 280px;
-                                                                                                border-right-width: 5px;
-                                                                                                padding-right: 5px;
-                                                                                                margin-bottom: 20px;
-                                                                                              ">
+                                                          width: 280px;
+                                                          border-right-width: 5px;
+                                                          padding-right: 5px;
+                                                          margin-bottom: 20px;
+                                                        ">
                     <div style="display: inline; margin-left: 5px; margin-right: 5px;">
                       <img :src="o.userAvatar
                       " class="image" alt="角色头像" />
@@ -56,7 +56,7 @@
                       <span style="margin-bottom: 16px">{{ o.name }}</span>
                       <div style="display:inline-grid">
                         <span>{{ o.profile }}</span>
-                        <el-button type="primary" class="button">查看用户信息</el-button>
+                        <el-button type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
                       </div>
                     </div>
                   </el-card>
@@ -78,8 +78,10 @@
 
 <script>
 import { userListByPage } from '@/api/user'
+
 export default {
   name: 'SearchFriend',
+  props: ['showUserByIdEvent'],
   data() {
     return {
       name: 'SearchFriend',
@@ -89,7 +91,7 @@ export default {
       total: 1,
       currentPage: 1,
       list: [],
-      input: ""
+      input: ''
     }
   },
   methods: {
@@ -129,6 +131,10 @@ export default {
       this.total = resp.data.total
       this.list = resp.data.list
       console.log(this.list)
+    },
+    getUserInfoById(id) {
+      console.log('userId', id);
+      this.showUserByIdEvent(id)
     }
   },
   mounted() {

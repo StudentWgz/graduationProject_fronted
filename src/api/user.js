@@ -45,3 +45,19 @@ export function userListByPage(data) {
     data
   })
 }
+
+export function editUser(data) {
+  return request({
+    url: '/user/editUser',
+    method: 'post',
+    data
+  })
+}
+
+export async function getUserListByIdsUsingPOST(data) {
+  return request({
+    url: '/user/getUserListByIds',
+    method: 'POST',
+    data
+  });
+}

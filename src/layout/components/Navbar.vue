@@ -1,10 +1,6 @@
 <template>
   <div class="navbar">
-    <hamburger
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar"
-    />
+    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb class="breadcrumb-container" />
 
@@ -18,10 +14,12 @@
         </span>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <span style="margin-left: 20px">{{ userName }}</span>
-          <router-link to="/">
-            <el-dropdown-item> 我的信息 </el-dropdown-item>
+          <router-link to="/myinfomation">
+            <el-dropdown-item command="a"> 我的信息 </el-dropdown-item>
           </router-link>
-          <el-dropdown-item>好友列表</el-dropdown-item>
+          <router-link to="/myfriendlist">
+            <el-dropdown-item command="b">好友列表</el-dropdown-item>
+          </router-link>
           <router-link to="/dashboard">
             <el-dropdown-item command="c">用户界面</el-dropdown-item>
           </router-link>
