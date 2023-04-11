@@ -43,13 +43,13 @@
                       </div>
                       <div style="float:right">
                         <el-tag type="warning" style="margin-top: 6px;position:absolute;right:20px">
-                          队伍人数:{{ o.nownum }}/{{ o.maxnum }}
+                          队伍人数:{{ o.nowNum }}/{{ o.maxNum }}
                         </el-tag>
                       </div>
                       <el-divider></el-divider>
                     </div>
                     <div style="display: flex; ">
-                      <img :src="o.avatarurl" class="image" alt="我坤哥" />
+                      <img :src="o.avatarUrl" class="image" alt="我坤哥" />
                       <div>
                         <div style="margin-bottom: 2px">
                           <el-tag type="success"> {{ o.description }} </el-tag>
@@ -65,11 +65,11 @@
                               </el-table-column>
                             </el-table>
                             <el-table height="50" border style="width: 100%">
-                              <el-table-column prop="o.createname" :label="o.createname" width="180">
+                              <el-table-column prop="o.createname" :label="o.createName" width="180">
                               </el-table-column>
-                              <el-table-column prop="" :label="o.createtime" width="180">
+                              <el-table-column prop="" :label="o.createTime" width="180">
                               </el-table-column>
-                              <el-table-column prop="" :label="o.expiretime" width="180">
+                              <el-table-column prop="" :label="o.expireTime" width="180">
                               </el-table-column>
                             </el-table>
                           </div>
@@ -90,7 +90,7 @@
           </div>
           <div class="block"
             height="1000px
-                                                                                                                                                                                                                                                                                                                                                                                                                                                ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
               :current-page="currentPage" :page-sizes="[6, 9, 15, 21]" :page-size="6"
               layout="total, sizes, prev, pager, next, jumper" :total="total">
