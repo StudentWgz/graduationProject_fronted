@@ -8,7 +8,7 @@
         <Chat v-if="name === 'chat'"></Chat>
         <SearchFriend v-else-if="name === 'searchFriend'" :showUserByIdEvent="getUserId"></SearchFriend>
         <SearchTeam v-else-if="name === 'searchTeam'"></SearchTeam>
-        <UserInfoById :toUserId="userId" v-if="userId !== 0"></UserInfoById>
+        <!-- <UserInfoById :toUserId="userId" v-if="userId !== 0"></UserInfoById> -->
       </el-main>
     </el-container>
   </el-container>
