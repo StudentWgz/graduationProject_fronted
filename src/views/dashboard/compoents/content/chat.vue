@@ -68,7 +68,7 @@
                 <!--          <div style="width: 50px; line-height: 30px; margin-left: 5px; color: #888; overflow: hidden; font-size: 14px">{{ item.username }}</div>-->
                 <div v-if="item.uid === toUser.id"
                   style="line-height: 30px; background-color: aliceblue; padding: 0 10px; width:fit-content; border-radius: 10px">
-                  {{ item.text }}
+                  {{ item.text }}22
                 </div>
               </div>
 
@@ -76,7 +76,7 @@
                 style="display: flex; justify-content: flex-end; margin: 20px 0;p">
                 <div
                   style="line-height: 30px; background-color: lightyellow; padding: 0 10px; width:fit-content; border-radius: 10px;">
-                  {{ item.text }}
+                  {{ item.text }}11
                 </div>
                 <el-popover :width="100" placement="top-start" trigger="hover">
                   <template #reference>
@@ -90,11 +90,12 @@
                 </el-popover>
               </div>
             </div>
-            <div class="footer">
-              <el-input type="textarea" v-model="text" class="inp" placeholder="请输入内容" resize="none"  :rows="3"></el-input>
-              <el-button style="float: right ;margin: 10px 0; display: inline-block;" type="primary" @click="send" >发送</el-button>
-            </div>
+
           </div>
+          <div class="footer">
+              <el-input type="textarea" v-model="text" class="inp" placeholder="请输入内容" resize="none"  :rows="3"></el-input>
+              <el-button class="btn" type="primary" @click="send" >发送</el-button>
+            </div>
         </div>
       </el-main>
     </el-container>
@@ -134,32 +135,34 @@ export default {
       ],
       loginUserIdList: [],
       // 聊天对象
-      toUser: [
+      toUser:
         {
           id: 2,
           isNew: null,
           avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
           username: 'wgz',
           profile: '....'
-        }
-      ],
+        }      ,
       // 消息记录
       messages: [
         {
           uid: 1,
-          text: 'h1'
+          text: 'h1',
+          toId:2
         },
         {
           uid: 2,
           text: 'h2'
         },
         {
-          uid: 3,
-          text: 'h3'
+          uid: 1,
+          text: 'h3',
+          toId:2
         }
       ],
       // optionsName:null,
       text: '',
+      client:null
     }
   },
   mounted() {
@@ -174,18 +177,18 @@ export default {
       loginUserList.value = res.data
     },
     initWebSocket() {
-      const client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
-      // const client = new WebSocket(`ws://123.249.33.231:8088/ws?id=2`)
-      client.onopen = () => {
+      this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
+      // const this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=2`)
+      this.client.onopen = () => {
         console.log('open')
       }
-      client.onclose = () => {  // 页面刷新的时候和后台websocket服务关闭的时候
+      this.client.onclose = () => {  // 页面刷新的时候和后台websocket服务关闭的时候
         // ElMessage.error('服务器断开，请刷新重试');
         console.log('close')
       }
 
       // 当收到消息
-      client.onmessage = (msg) => {
+      this.client.onmessage = (msg) => {
         console.log(11, msg)
         // if (msg.data) {
         //   // console.log(msg.data)
@@ -232,13 +235,14 @@ export default {
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 94%;
-  margin-bottom: 12px;
-  .inp{
-    border:none;
-    width: 90%;
-}
+  display: flex;
+  width: 100%;
+  margin-top: 12px;
+  .btn{
+    height: 40%;
+    width: 12vw;
+    align-self: center;
+    margin-left: 12%;
+  }
 }
 </style>
