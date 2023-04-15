@@ -8,7 +8,7 @@
               <span>在线列表</span>
             </div>
           </template>
-          <el-empty v-if="!loginUserList || loginUserList.length === 1" description="还没有人在线喔~" />
+          <el-empty v-if="!loginUserList || loginUserList.length === 0" description="还没有人在线喔~" />
           <div v-for="item in loginUserList" style="margin-bottom: 8px">
             <el-popover :width="200" placement="top-start" trigger="hover">
               <template #reference>
@@ -42,7 +42,6 @@
         <div v-else style="width: 90%; margin: 0 auto">
           <div class="imHeader">
             <el-card class="box-card">
-
               <div slot="header" class="im-card-header">
                 <div style="display: flex; align-items: center;">
                   <el-avatar :size="50" :src="toUser.avatarUrl" />
@@ -53,7 +52,7 @@
             </el-card>
           </div>
           <div ref="divRef"
-            style="background-color: white; padding: 20px; border: 1px solid #ccc; border-radius: 10px; height: 380px; overflow-y: scroll;">
+            style="background-color: white;position: relative; padding: 20px; border: 1px solid #ccc; border-radius: 10px; min-height: 280px; overflow-y: scroll;">
             <div v-for="item in messages" :key="item.id">
               <div v-if="currentUser.id !== item.uid && item.uid === toUser.id" style="display: flex; margin: 20px 0;">
                 <el-popover :width="100" placement="top-start" trigger="click">
@@ -74,7 +73,7 @@
               </div>
 
               <div v-else-if="currentUser.id === item.uid && item.toId === toUser.id"
-                style="display: flex; justify-content: flex-end; margin: 20px 0;">
+                style="display: flex; justify-content: flex-end; margin: 20px 0;p">
                 <div
                   style="line-height: 30px; background-color: lightyellow; padding: 0 10px; width:fit-content; border-radius: 10px;">
                   {{ item.text }}
@@ -91,16 +90,12 @@
                 </el-popover>
               </div>
             </div>
-          0/div=-77；
-          <div style="margin: 10px 0; width: 100%">
-            <V3Emoji v-model="text" :keep="true" :options-name="optionsName" :recent="true" :textArea="true"
-              default-select="recent" size="mid" />
-            <div style="text-align: right">
-              <el-button type="primary" @click="send">发送</el-button>
+            <div class="footer">
+              <el-input type="textarea" v-model="text" class="inp" placeholder="请输入内容" resize="none"  :rows="3"></el-input>
+              <el-button style="float: right ;margin: 10px 0; display: inline-block;" type="primary" @click="send" >发送</el-button>
             </div>
           </div>
         </div>
-      </div>
       </el-main>
     </el-container>
   </div>
@@ -108,14 +103,63 @@
 
 <script>
 // import { getUserListByIdsUsingPOST } from "@/api/user/getUserListByIdsUsingPOST"
+// import V3Emoji from 'vue3-emoji'
+// import 'vue3-emoji/dist/style.css'
 export default {
   name: 'Chat',
   data() {
     return {
       name: 'Chat',
-      loginUserList: [],
+      // 当前用户
+      currentUser: {
+        id: 1,
+        avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+      },
+      //在线登录用户
+      loginUserList: [
+        {
+          id: 1,
+          isNew: '11',
+          avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+          username: 'wgz1',
+          profile: '....'
+        },
+        {
+          id: 2,
+          isNew: null,
+          avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+          username: 'wgz2',
+          profile: '....'
+        }
+      ],
       loginUserIdList: [],
-      toUser:null
+      // 聊天对象
+      toUser: [
+        {
+          id: 2,
+          isNew: null,
+          avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+          username: 'wgz',
+          profile: '....'
+        }
+      ],
+      // 消息记录
+      messages: [
+        {
+          uid: 1,
+          text: 'h1'
+        },
+        {
+          uid: 2,
+          text: 'h2'
+        },
+        {
+          uid: 3,
+          text: 'h3'
+        }
+      ],
+      // optionsName:null,
+      text: '',
     }
   },
   mounted() {
@@ -142,7 +186,7 @@ export default {
 
       // 当收到消息
       client.onmessage = (msg) => {
-        console.log(11,msg)
+        console.log(11, msg)
         // if (msg.data) {
         //   // console.log(msg.data)
         //   let json = JSON.parse(msg.data)
@@ -165,14 +209,18 @@ export default {
         //   }
         // }
       }
-    }
+    },
+    getHistoryMessage() {
+
+    },
+    send() { }
   },
 }
 </script>
 
 
 
-<style>
+<style lang="scss">
 .im-card-header {
   display: flex;
   justify-content: space-between;
@@ -181,5 +229,16 @@ export default {
 
 .imHeader {
   margin-bottom: 5px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 94%;
+  margin-bottom: 12px;
+  .inp{
+    border:none;
+    width: 90%;
+}
 }
 </style>
