@@ -187,25 +187,26 @@ export default {
           //   }
           // }
         }
-      },
-        getHistoryMessage() {
-
-      },
-      send() {
-        const client = new WebSocket("ws://123.249.33.231:8888/im")
-        const messages = {
-          uid: 16,  // 发消息对象
-          toId: 1,  // 受消息对象
-          text: '测试消息',   //消息体内容
-        }
-        client.onopen = function (evt) {
-          console.log("Connection open ...");
-          console.log("用户" + messages.uid + "给" + messages.toId + "发送消息");
-          client.send(JSON.stringify(messages));
-        };
-      },
+      }
     },
-  }
+    getHistoryMessage() {
+
+    },
+    send() {
+      const client = new WebSocket("ws://123.249.33.231:8888/im")
+      const messages = {
+        uid: 16,  // 发消息对象
+        toId: 1,  // 受消息对象
+        text: '测试消息',   //消息体内容
+      }
+      client.onopen = function (evt) {
+        console.log("Connection open ...");
+        console.log("用户" + messages.uid + "给" + messages.toId + "发送消息");
+        client.send(JSON.stringify(messages));
+      };
+    },
+  },
+}
 </script>
 
 
