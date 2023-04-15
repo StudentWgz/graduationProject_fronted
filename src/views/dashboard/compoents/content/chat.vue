@@ -90,10 +90,11 @@
                 </el-popover>
               </div>
             </div>
-            <div class="footer">
-              <el-input type="textarea" v-model="text" class="inp" placeholder="请输入内容" resize="none" :rows="3"></el-input>
-              <el-button class="btn" type="primary" @click="send">发送</el-button>
-            </div>
+
+          </div>
+          <div class="footer">
+            <el-input type="textarea" v-model="text" class="inp" placeholder="请输入内容" resize="none" :rows="3"></el-input>
+            <el-button class="btn" type="primary" @click="send">发送</el-button>
           </div>
         </div>
       </el-main>
@@ -133,33 +134,7 @@ export default {
         }
       ],
       loginUserIdList: [],
-      // 聊天对象
-      toUser: [
-        {
-          id: 2,
-          isNew: null,
-          avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
-          username: 'wgz',
-          profile: '....'
-        }
-      ],
-      // 消息记录
-      messages: [
-        {
-          uid: 1,
-          text: 'h1'
-        },
-        {
-          uid: 2,
-          text: 'h2'
-        },
-        {
-          uid: 3,
-          text: 'h3'
-        }
-      ],
-      // optionsName:null,
-      text: '',
+      toUser: null
     }
   },
   mounted() {
@@ -175,61 +150,62 @@ export default {
       loginUserList.value = res.data
     },
     initWebSocket() {
-      // const client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
-      const client = new WebSocket("ws://123.249.33.231:8888/im")
-      // const client = new WebSocket(`ws://123.249.33.231:8088/ws?id=2`)
-      client.onopen = () => {
+      this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
+      // const this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=2`)
+      this.client.onopen = () => {
         console.log('open')
       }
-      client.onclose = () => {  // 页面刷新的时候和后台websocket服务关闭的时候
+      this.client.onclose = () => {  // 页面刷新的时候和后台websocket服务关闭的时候
         // ElMessage.error('服务器断开，请刷新重试');
         console.log('close')
       }
 
       // 当收到消息
-      client.onmessage = (msg) => {
-        console.log("收到消息", msg)
-        // if (msg.data) {
-        //   // console.log(msg.data)
-        //   let json = JSON.parse(msg.data)
-        //   const messageType = json.type;
-        //   if (messageType === 10003) {
-        //     addUserLoginList(json)
-        //     return;
-        //   }
-        //   // console.log(json)
-        //   if (json.uid && json.text) {  // 聊天消息
-        //     messages.value.push(json)
-        //     console.log(json)
-        //     console.log(messages)
-        //     loginUserList.value.forEach(user => {
-        //       if (user.id === json.uid) {
-        //         user.isNew = true;
-        //       }
-        //     })
-        //     scrollBottom()  // 滚动页面到最底部
-        //   }
-        // }
-      }
-    },
-    getHistoryMessage() {
+      this.client.onmessage = (msg) => {
+        console.log(11, msg)
+        client.onmessage = (msg) => {
+          console.log("收到消息", msg)
+          // if (msg.data) {
+          //   // console.log(msg.data)
+          //   let json = JSON.parse(msg.data)
+          //   const messageType = json.type;
+          //   if (messageType === 10003) {
+          //     addUserLoginList(json)
+          //     return;
+          //   }
+          //   // console.log(json)
+          //   if (json.uid && json.text) {  // 聊天消息
+          //     messages.value.push(json)
+          //     console.log(json)
+          //     console.log(messages)
+          //     loginUserList.value.forEach(user => {
+          //       if (user.id === json.uid) {
+          //         user.isNew = true;
+          //       }
+          //     })
+          //     scrollBottom()  // 滚动页面到最底部
+          //   }
+          // }
+        }
+      },
+        getHistoryMessage() {
 
+      },
+      send() {
+        const client = new WebSocket("ws://123.249.33.231:8888/im")
+        const messages = {
+          uid: 16,  // 发消息对象
+          toId: 1,  // 受消息对象
+          text: '测试消息',   //消息体内容
+        }
+        client.onopen = function (evt) {
+          console.log("Connection open ...");
+          console.log("用户" + messages.uid + "给" + messages.toId + "发送消息");
+          client.send(JSON.stringify(messages));
+        };
+      },
     },
-    send() {
-      const client = new WebSocket("ws://123.249.33.231:8888/im")
-      const messages = {
-        uid: 16,  // 发消息对象
-        toId: 1,  // 受消息对象
-        text: '测试消息',   //消息体内容
-      }
-      client.onopen = function (evt) {
-        console.log("Connection open ...");
-        console.log("用户" + messages.uid + "给" + messages.toId + "发送消息");
-        client.send(JSON.stringify(messages));
-      };
-    },
-  },
-}
+  }
 </script>
 
 
