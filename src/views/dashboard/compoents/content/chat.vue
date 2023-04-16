@@ -37,7 +37,11 @@
       <el-main style="padding: 0">
         <div v-if="!toUser">
           <el-empty :image-size="200" description="快去选择一名好友聊天吧！" />
+
+          <el-button class="btn" type="primary" @click="send1">发送</el-button>
+
         </div>
+
 
         <div v-else style="width: 90%; margin: 0 auto">
           <div class="imHeader">
@@ -94,7 +98,7 @@
           </div>
           <div class="footer">
             <el-input type="textarea" v-model="text" class="inp" placeholder="请输入内容" resize="none" :rows="3"></el-input>
-            <el-button class="btn" type="primary" @click="send">发送</el-button>
+            <el-button class="btn" type="primary" @click="send1">发送</el-button>
           </div>
         </div>
       </el-main>
@@ -111,6 +115,7 @@ export default {
   data() {
     return {
       name: 'Chat',
+      client: null,
       // 当前用户
       currentUser: {
         id: 1,
@@ -150,8 +155,8 @@ export default {
       loginUserList.value = res.data
     },
     initWebSocket() {
-      this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
-      // const this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=2`)
+      // this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
+      this.client = new WebSocket("ws://localhost:8888/im")
       this.client.onopen = () => {
         console.log('open')
       }
@@ -163,7 +168,7 @@ export default {
       // 当收到消息
       this.client.onmessage = (msg) => {
         console.log(11, msg)
-        client.onmessage = (msg) => {
+        this.client.onmessage = (msg) => {
           console.log("收到消息", msg)
           // if (msg.data) {
           //   // console.log(msg.data)
@@ -192,18 +197,19 @@ export default {
     getHistoryMessage() {
 
     },
-    send() {
-      const client = new WebSocket("ws://123.249.33.231:8888/im")
+    send1() {
+      console.log(111111)
+      // const client = new WebSocket("ws://123.249.33.231:8888/im")
       const messages = {
         uid: 16,  // 发消息对象
         toId: 1,  // 受消息对象
         text: '测试消息',   //消息体内容
       }
-      client.onopen = function (evt) {
-        console.log("Connection open ...");
-        console.log("用户" + messages.uid + "给" + messages.toId + "发送消息");
-        client.send(JSON.stringify(messages));
-      };
+
+      console.log("Connection open ...");
+      console.log("用户" + messages.uid + "给" + messages.toId + "发送消息");
+      this.client.send(JSON.stringify(messages));
+
     },
   },
 }
