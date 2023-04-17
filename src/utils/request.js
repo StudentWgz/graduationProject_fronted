@@ -3,6 +3,9 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
+
+axios.defaults.withCredentials = true;  //设置session共享
+
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -23,7 +26,7 @@ service.interceptors.request.use(
       const token2 = getToken()
       if (token2) {
         config.headers.common['Authorization'] = 'Bearer ' + token2
-    }
+      }
     }
     return config
   },

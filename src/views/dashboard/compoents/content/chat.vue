@@ -155,8 +155,8 @@ export default {
       loginUserList.value = res.data
     },
     initWebSocket() {
-      // this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
-      this.client = new WebSocket("ws://localhost:8888/im")
+      // this.client = new WebSocket(`ws://127.0.0.1:8888/im/${this.$store.state.user.userId}`)
+      this.client = new WebSocket(`ws://123.249.33.231:8888/im/${this.$store.state.user.userId}`)
       this.client.onopen = () => {
         console.log('open')
       }
