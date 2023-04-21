@@ -92,7 +92,7 @@
 
           </div>
           <div class="footer">
-            <el-input type="textarea" v-model.trim="text"  @keyup.enter.native="sendMsg" class="inp" placeholder="请输入内容" resize="none" :rows="3"></el-input>
+            <el-input type="textarea" v-model="text"  @keyup.enter.native="sendMsg" class="inp" placeholder="请输入内容" resize="none" :rows="3"></el-input>
             <el-button class="btn" type="primary" @click="sendMsg">发送</el-button>
           </div>
         </div>
@@ -249,7 +249,11 @@ export default {
       this.scroll()
     },
     sendMsg() {
-      if (this.text==='') return
+      if (!this.text.trim()) {
+        this.text=null
+        return
+      }
+      console.log(this.text);
       const messages={
         uId:this.userId,
         toId:this.toUser.id,
