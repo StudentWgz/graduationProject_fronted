@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 1000px">
+  <div >
     <div style="height: 600px">
 
       <el-container>
@@ -26,16 +26,11 @@
           <el-input placeholder="搜索感兴趣的人吧！" v-model="input" clearable style="width:25%;margin-bottom:2%">
           </el-input>
           <el-button style="margin-left: 20px" type="primary" @click="initUser">搜索</el-button>
-          <div style="display: inline">
-            <div style="width: 150px height:250px">
-              <el-row>
-                <el-col :span="8" v-for="(o, index) in this.list" :key="index" margin-right="12px">
-                  <el-card :body-style="{ padding: '0px' }" style="
-                                                          width: 280px;
-                                                          border-right-width: 5px;
-                                                          padding-right: 5px;
-                                                          margin-bottom: 20px;
-                                                        ">
+            <div>
+              <div style="display: flex; flex-wrap: wrap;">
+                <div    v-for="(o, index) in list" :key="index" >
+                  <!-- v-if="o.id!==userId" -->
+                  <el-card class="card" >
                     <div style="display: inline; margin-left: 5px; margin-right: 5px;">
                       <img :src="o.userAvatar
                       " class="image" alt="角色头像" />
@@ -60,8 +55,7 @@
                       </div>
                     </div>
                   </el-card>
-                </el-col>
-              </el-row>
+                </div>
             </div>
           </div>
           <div class="block" height="1000px">
@@ -78,6 +72,7 @@
 
 <script>
 import { userListByPage } from '@/api/user'
+import {mapState} from 'vuex'
 
 export default {
   name: 'SearchFriend',
@@ -93,6 +88,9 @@ export default {
       list: [],
       input: ''
     }
+  },
+  computed:{
+    ...mapState({userId:state=>state.user.userId})
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -130,20 +128,49 @@ export default {
       })
       this.total = resp.data.total
       this.list = resp.data.list
-      console.log(this.list)
     },
     getUserInfoById(id) {
-      console.log('userId', id);
-      this.showUserByIdEvent(id)
+      const h = this.$createElement;
+        this.$msgbox({
+          title: '添加好友',
+          message: h('p', null, [
+            h('span', null, '内容可以是 '),
+            h('i', { style: 'color: teal' }, 'VNode')
+          ]),
+          showCancelButton: true,
+          showConfirmButton:id===1?false:true,
+          confirmButtonText: '添加',
+          cancelButtonText: '返回',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = '执行中...';
+              setTimeout(() => {
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                }, 300);
+              }, 2000);
+            } else {
+              done();
+            }
+          }
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: "添加成功"
+          });
+        },()=>{});
     }
   },
+
   mounted() {
     this.initUser()
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .time {
   font-size: 13px;
   color: #999;
@@ -180,8 +207,13 @@ export default {
 }
 
 .main {
-  margin-left: 35px;
-  margin-right: 35px;
+  width: 80vw !important;
+  .card{
+    width: 280px;
+    margin-bottom: 20px;
+    border-right-width: 5px;
+    padding-right: 5px;
+  }
 }
 
 .el-col-8 {

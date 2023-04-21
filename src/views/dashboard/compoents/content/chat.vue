@@ -9,24 +9,24 @@
             </div>
           </template>
           <el-empty v-if="!loginUserList || loginUserList.length === 0" description="还没有人在线喔~" />
-          <div v-for="item in loginUserList" style="margin-bottom: 8px">
-            <el-popover :width="200" placement="top-start" trigger="hover">
+          <div v-for="item in loginUserList" style="margin-bottom: 8px" @click.native.self="checkToUser(item)">
+            <el-popover :width="100" placement="right" trigger="hover" >
               <template #reference>
                 <div v-if="item.id !== currentUser.id" style="display: flex; align-items: center;">
-                  <template v-if="item.isNew">
+                  <template v-if="item.isInline">
                     <el-badge class="item" is-dot>
-                      <el-avatar :size="50" :src="item.avatarUrl" @click="checkToUser(item)" />
+                      <el-avatar :size="50" :src="item.userAvatar" @click.native="checkToUser(item)" />
                     </el-badge>
                   </template>
                   <template v-else>
-                    <el-avatar :size="50" :src="item.avatarUrl" @click="checkToUser(item)" />
+                    <el-avatar :size="50" :src="item.userAvatar" @click.native.self="checkToUser(item)" />
                   </template>
-                  <span style="margin-left: 5px">{{ item.username }}</span>
+                  <span style="margin-left: 5px;">{{ item.friendName }}</span>
                 </div>
               </template>
-              <div style="line-height: 20px">
-                <div style="font-size: 16px">{{ item.username }}</div>
-                <div style="font-size: 12px;">{{ item.profile }}</div>
+              <div style="line-height: 20px;margin-left: 20px;">
+                <div style="font-size: 16px">{{ item.friendName }}</div>
+                <div style="font-size: 12px;">{{ item.profile }}数据待定</div>
               </div>
             </el-popover>
           </div>
@@ -37,9 +37,6 @@
       <el-main style="padding: 0">
         <div v-if="!toUser">
           <el-empty :image-size="200" description="快去选择一名好友聊天吧！" />
-
-          <el-button class="btn" type="primary" @click="send1">发送</el-button>
-
         </div>
 
 
@@ -48,47 +45,45 @@
             <el-card class="box-card">
               <div slot="header" class="im-card-header">
                 <div style="display: flex; align-items: center;">
-                  <el-avatar :size="50" :src="toUser.avatarUrl" />
-                  <span style="margin-left: 5px">{{ toUser.username }}</span>
+                  <el-avatar :size="50" :src="toUser.userAvatar" />
+                  <span style="margin-left: 5px">{{ toUser.friendName }}</span>
                 </div>
-                <el-button type="info" @click="getHistoryMessage">获取历史消息</el-button>
+                <el-button type="info" @click="getHistoryMessage(toUser)">获取历史消息</el-button>
               </div>
             </el-card>
           </div>
-          <div ref="divRef"
-            style="background-color: white;position: relative; padding: 20px; border: 1px solid #ccc; border-radius: 10px; min-height: 280px; overflow-y: scroll;">
+          <div ref="divRef" class="chat-content" id="msg-box">
             <div v-for="item in messages" :key="item.id">
-              <div v-if="currentUser.id !== item.uid && item.uid === toUser.id" style="display: flex; margin: 20px 0;">
+              <div v-if="currentUser.id !== item.uId && item.uId === toUser.id" style="display: flex; margin: 20px 0;">
                 <el-popover :width="100" placement="top-start" trigger="click">
                   <template #reference>
-                    <img :src="toUser.avatarUrl" alt=""
+                    <img :src="toUser.userAvatar" alt=""
                       style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px">
                   </template>
                   <div style="line-height: 20px">
-                    <div style="font-size: 16px">{{ toUser.username }}</div>
+                    <div style="font-size: 16px">{{ toUser.userName }}</div>
                     <div style="font-size: 12px;">{{ toUser.profile }}</div>
                   </div>
                 </el-popover>
-                <!--          <div style="width: 50px; line-height: 30px; margin-left: 5px; color: #888; overflow: hidden; font-size: 14px">{{ item.username }}</div>-->
-                <div v-if="item.uid === toUser.id"
-                  style="line-height: 30px; background-color: aliceblue; padding: 0 10px; width:fit-content; border-radius: 10px">
-                  {{ item.text }}22
+                <!--          <div style="width: 50px; line-height: 30px; margin-left: 5px; color: #888; overflow: hidden; font-size: 14px">{{ item.userName }}</div>-->
+                <div v-if="item.uId === toUser.id"
+                  style="line-height: 30px; background-color: #ccc; padding: 0 10px; width:fit-content; border-radius: 10px">
+                  {{ item.text }}
                 </div>
               </div>
-
-              <div v-else-if="currentUser.id === item.uid && item.toId === toUser.id"
+              <div v-else-if="currentUser.id === item.uId && item.toId === toUser.id"
                 style="display: flex; justify-content: flex-end; margin: 20px 0;p">
                 <div
-                  style="line-height: 30px; background-color: lightyellow; padding: 0 10px; width:fit-content; border-radius: 10px;">
-                  {{ item.text }}11
+                  style="line-height: 30px; background-color: aliceblue; padding: 0 10px; width:fit-content; border-radius: 10px;">
+                  {{ item.text }}
                 </div>
-                <el-popover :width="100" placement="top-start" trigger="hover">
+                <el-popover disabled :width="100" placement="top-start" trigger="hover">
                   <template #reference>
-                    <img :src="currentUser.avatarUrl" alt=""
+                    <img :src="currentUser.userAvatar" alt=""
                       style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px">
                   </template>
-                  <div style="line-height: 20px">
-                    <div style="font-size: 16px">{{ currentUser.username }}</div>
+                  <div style="line-height: 20px;background-color: red;">
+                    <div style="font-size: 16px">{{ currentUser.userName }}</div>
                     <div style="font-size: 12px;">{{ currentUser.profile }}</div>
                   </div>
                 </el-popover>
@@ -97,8 +92,8 @@
 
           </div>
           <div class="footer">
-            <el-input type="textarea" v-model="text" class="inp" placeholder="请输入内容" resize="none" :rows="3"></el-input>
-            <el-button class="btn" type="primary" @click="send1">发送</el-button>
+            <el-input type="textarea" v-model.trim="text"  @keyup.enter.native="sendMsg" class="inp" placeholder="请输入内容" resize="none" :rows="3"></el-input>
+            <el-button class="btn" type="primary" @click="sendMsg">发送</el-button>
           </div>
         </div>
       </el-main>
@@ -110,6 +105,8 @@
 // import { getUserListByIdsUsingPOST } from "@/api/user/getUserListByIdsUsingPOST"
 // import V3Emoji from 'vue3-emoji'
 // import 'vue3-emoji/dist/style.css'
+import { getAllUsers, getChatRecord } from '@/api/user';
+import {mapState} from 'vuex'
 export default {
   name: 'Chat',
   data() {
@@ -119,44 +116,104 @@ export default {
       // 当前用户
       currentUser: {
         id: 1,
-        avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+        userAvatar: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
       },
       //在线登录用户
-      loginUserList: [
+      loginUserList: [],
+      loginUserIdList: [],
+      toUser: null,
+      messages: [
         {
-          id: 1,
-          isNew: '11',
-          avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
-          username: 'wgz1',
-          profile: '....'
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
         },
         {
-          id: 2,
-          isNew: null,
-          avatarUrl: 'https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
-          username: 'wgz2',
-          profile: '....'
-        }
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
+        },
+        {
+          uId: 2,
+          toId: 1,
+          text: 'hhhh'
+        },
+        {
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
+        },
+        {
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
+        },
+        {
+          uId: 2,
+          toId: 1,
+          text: 'hhhh'
+        },
+        {
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
+        },
+        {
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
+        },
+        {
+          uId: 2,
+          toId: 1,
+          text: 'hhhh'
+        },
+        {
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
+        },
+        {
+          uId: 1,
+          toId: 2,
+          text: 'hhhh'
+        },
+        {
+          uId: 2,
+          toId: 1,
+          text: 'hhhh'
+        },
       ],
-      loginUserIdList: [],
-      toUser: null
+      text: null
     }
+  },
+  computed:{
+    ...mapState({userId:state=>state.user.userId})
   },
   mounted() {
     this.initWebSocket()
+    this.getAllUsers()
+
+
   },
   methods: {
-
-    async addUserLoginList(data) {
-      this.loginUserIdList = JSON.parse(data.im.text)
-      const res = await getUserListByIdsUsingPOST({
-        ids: this.loginUserIdList.value
+    scroll(){
+      this.$nextTick(() => {
+        let scrollEl = this.$refs.divRef;
+        scrollEl.scrollTo({ top: scrollEl.scrollHeight, behavior: 'smooth' });
       });
-      loginUserList.value = res.data
     },
+    // async addUserLoginList(data) {
+    //   this.loginUserIdList = JSON.parse(data.im.text)
+    //   const res = await getUserListByIdsUsingPOST({
+    //     ids: this.loginUserIdList.value
+    //   });
+    //   this.loginUserList = res.data
+    // },
     initWebSocket() {
-      // this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
-      this.client = new WebSocket("ws://localhost:8888/im")
+      // this.client = new WebSocket(`ws://127.0.0.1:8888/im/${this.$store.state.user.userId}`)
+      this.client = new WebSocket(`ws://123.249.33.231:8888/im/${this.$store.state.user.userId}`)
+
       this.client.onopen = () => {
         console.log('open')
       }
@@ -167,48 +224,42 @@ export default {
 
       // 当收到消息
       this.client.onmessage = (msg) => {
-        console.log(11, msg)
-        this.client.onmessage = (msg) => {
-          console.log("收到消息", msg)
-          // if (msg.data) {
-          //   // console.log(msg.data)
-          //   let json = JSON.parse(msg.data)
-          //   const messageType = json.type;
-          //   if (messageType === 10003) {
-          //     addUserLoginList(json)
-          //     return;
-          //   }
-          //   // console.log(json)
-          //   if (json.uid && json.text) {  // 聊天消息
-          //     messages.value.push(json)
-          //     console.log(json)
-          //     console.log(messages)
-          //     loginUserList.value.forEach(user => {
-          //       if (user.id === json.uid) {
-          //         user.isNew = true;
-          //       }
-          //     })
-          //     scrollBottom()  // 滚动页面到最底部
-          //   }
-          // }
+        this.messages.push(msg)
+      }
+    },
+    async getHistoryMessage(msg) {
+      const { id } = msg
+      const data = { friendId: id }
+      const res = await getChatRecord(data)
+      console.log(res);
+    },
+    async getAllUsers() {
+      const res = await getAllUsers()
+      const arr=[]
+      //将在线的用户放在在线列表的top
+     res.data.forEach(((item,key)=>{
+        if (item.isInline) {
+          arr.push(item)
+          res.data.splice(key,key+1)
         }
-      }
+      }))
+      this.loginUserList=[...arr,...res.data]
     },
-    getHistoryMessage() {
-
+    checkToUser(item) {
+      this.toUser = item
+      this.scroll()
     },
-    send1() {
-      console.log(111111)
-      // const client = new WebSocket("ws://123.249.33.231:8888/im")
-      const messages = {
-        uid: 16,  // 发消息对象
-        toId: 1,  // 受消息对象
-        text: '测试消息',   //消息体内容
+    sendMsg() {
+      if (this.text==='') return
+      const messages={
+        uId:this.userId,
+        toId:this.toUser.id,
+        text:this.text
       }
-
-      console.log("Connection open ...");
-      console.log("用户" + messages.uid + "给" + messages.toId + "发送消息");
+      this.messages.push(messages)
+      this.text=null
       this.client.send(JSON.stringify(messages));
+      this.scroll()
 
     },
   },
@@ -228,6 +279,61 @@ export default {
   margin-bottom: 5px;
 }
 
+.chat-content {
+  background-color: white;
+  position: relative;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  min-height: 280px;
+  max-height: 400px;
+  overflow-y: scroll;
+
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+border-radius:10px;
+background:#CCC;
+-webkit-box-shadow:#fafafa;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+background:#ccc;
+}
+::-webkit-scrollbar{
+
+width:10px;
+
+height:10px;
+
+background-color:#fff;
+
+}
+
+/*定义滚动条轨道
+
+内阴影+圆角*/
+
+::-webkit-scrollbar-track{
+
+
+border-radius:10px;
+
+
+}
+
+/*定义滑块
+
+内阴影+圆角*/
+
+::-webkit-scrollbar-thumb{
+
+border-radius:4px;
+
+
+
+}
+
+
 .footer {
   display: flex;
   width: 100%;
@@ -239,5 +345,4 @@ export default {
     align-self: center;
     margin-left: 12%;
   }
-}
-</style>
+}</style>

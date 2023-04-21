@@ -61,3 +61,18 @@ export async function getUserListByIdsUsingPOST(data) {
     data
   });
 }
+// 获取在线用户
+export function getAllUsers() {
+  return request({
+    url: '/user/getFriendShipOfInline',
+    method: 'post',
+  })
+}
+// 获取聊天历史消息
+export function getChatRecord(data) {
+  return request({
+    url: '/im/getChatRecordById',
+    method: 'get',
+    data
+  })
+}
