@@ -69,10 +69,10 @@ export function getAllUsers() {
   })
 }
 // 获取聊天历史消息
-export function getChatRecord(data) {
+export function getChatRecord(id) {
   return request({
     url: '/im/getChatRecordById',
     method: 'get',
-    data
+    params: { friendId: id }
   })
 }
