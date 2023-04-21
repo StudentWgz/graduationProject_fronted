@@ -1,7 +1,6 @@
 <template>
   <div >
     <div style="height: 600px">
-
       <el-container>
         <el-aside style="width: 160px">
           <!-- 左边导航栏 -->
