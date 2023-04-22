@@ -12,7 +12,7 @@
           <div v-for="item in loginUserList" style="margin-bottom: 8px" @click.native.self="checkToUser(item)">
             <el-popover :width="100" placement="right" trigger="hover">
               <template #reference>
-                <div v-if="item.id !== currentUser.id" style="display: flex; align-items: center;">
+                <div v-if="item.userId == currentUser.id" style="display: flex; align-items: center;">
                   <template v-if="item.isInline">
                     <el-badge class="item" is-dot>
                       <el-avatar :size="50" :src="item.friendAvatarUrl" @click.native="checkToUser(item)" />
@@ -90,7 +90,6 @@
                 </el-popover>
               </div>
             </div>
-
           </div>
           <div class="footer">
             <el-input type="textarea" v-model="text" @keyup.enter.native="sendMsg" class="inp" placeholder="请输入内容"
@@ -137,6 +136,7 @@ export default {
     this.initWebSocket()
     this.getAllUsers()
     this.getUserInfoById()
+    console.log(1);
   },
   methods: {
     scroll() {
@@ -153,16 +153,16 @@ export default {
     //   this.loginUserList = res.data
     // },
     initWebSocket() {
-      // this.client = new WebSocket(`ws://123.249.33.231:8088/ws?id=${this.$store.state.user.userId}`)
-      this.client = new WebSocket(`ws://localhost:8888/im/${this.$store.state.user.userId}/`)
+      // this.client = new WebSocket(`ws://localhost:8888/im/${this.$store.state.user.userId}/`)
+      this.client = new WebSocket(`ws://123.249.33.231:8888/im/${this.$store.state.user.userId}`)
       this.client.onopen = () => {
         console.log('open')
       }
-      this.client.onclose = () => {  // 页面刷新的时候和后台websocket服务关闭的时候
+      this.client.onclose = () => {
+        // 页面刷新的时候和后台websocket服务关闭的时候
         // ElMessage.error('服务器断开，请刷新重试');
         console.log('close')
       }
-
       // 当收到消息
       this.client.onmessage = (msg) => {
         console.log('收到消息：', msg.data)
@@ -170,25 +170,37 @@ export default {
         if (msg.data.includes("userName")) {
           this.messages.push(im)
         }
-        console.log('message:', this.messages)
       }
     },
     async getHistoryMessage(msg) {
       const { friendId } = msg
       const res = await getChatRecord(friendId)
-      console.log(res);
+      console.log(res.data);
+      const historyMsg = res.data.map(item => {
+        return {
+          uid: item.uid,
+          toId: item.toId,
+          text: item.text,
+
+        }
+      })
+      this.messages.push(...historyMsg)
+
     },
     async getAllUsers() {
       const res = await getAllUsers()
       const arr = []
+      console.log(res.data);
       //将在线的用户放在在线列表的top
-      res.data.forEach(((item, key) => {
+      res.data.forEach(((item) => {
         if (item.isInline) {
-          arr.push(item)
-          res.data.splice(key, key + 1)
+          this.loginUserList.unshift(item)
+        }
+        else{
+          this.loginUserList.push(item)
         }
       }))
-      this.loginUserList = [...arr, ...res.data]
+      console.log(this.loginUserList);
     },
     checkToUser(item) {
       this.toUser = item
@@ -196,15 +208,11 @@ export default {
       this.scroll()
     },
     sendMsg() {
-
       console.log('currentUser.id', this.currentUser.id, 'toUser.friendId', this.toUser.friendId)
-
-      if (!this.text.trim()) {
+      if (!this.text?.trim()) {
         this.text = null
         return
       }
-      console.log(this.text);
-      console.log(1111, this.toUser)
       const messages = {
         uid: this.userId,
         toId: this.toUser.friendId,

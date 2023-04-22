@@ -61,7 +61,7 @@ export async function getUserListByIdsUsingPOST(data) {
     data
   });
 }
-// 获取在线用户
+// 获取在线朋友
 export function getAllUsers() {
   return request({
     url: '/user/getFriendShipOfInline',
@@ -73,6 +73,14 @@ export function getChatRecord(id) {
   return request({
     url: '/im/getChatRecordById',
     method: 'get',
+    params: { friendId: id }
+  })
+}
+// 添加好友
+export function addFriendShip(id) {
+  return request({
+    url: '/user/addFriendShip',
+    method: 'post',
     params: { friendId: id }
   })
 }

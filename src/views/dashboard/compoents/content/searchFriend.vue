@@ -1,6 +1,5 @@
 <template>
-  <div >
-    <div style="height: 600px">
+    <div >
       <el-container>
         <el-aside style="width: 160px">
           <!-- 左边导航栏 -->
@@ -25,39 +24,38 @@
           <el-input placeholder="搜索感兴趣的人吧！" v-model="input" clearable style="width:25%;margin-bottom:2%">
           </el-input>
           <el-button style="margin-left: 20px" type="primary" @click="initUser">搜索</el-button>
-            <div>
+
               <div style="display: flex; flex-wrap: wrap;">
-                <div    v-for="(o, index) in list" :key="index" >
-                  <!-- v-if="o.id!==userId" -->
+                <div v-for="(o, index) in list" :key="index" v-if="o.id !==userId">
                   <el-card class="card" >
-                    <div style="display: inline; margin-left: 5px; margin-right: 5px;">
+                    <div style="display: inline; ">
                       <img :src="o.userAvatar
                       " class="image" alt="角色头像" />
                       <div style="height:100px">
                         <div style="margin-bottom: 2px;margin-left: 30%">
                           <p> {{ o.userName }} </p>
                         </div>
-                        <div v-for="(tag, index) in o.tags" :key="index"
-                          style="display:inline-flex ;margin-right:10px;margin-left:10px">
+                        <div style="margin: 0 5px;">
+                          <div v-for="(tag, index) in o.tags" :key="index"
+                          style="display:inline-flex ;margin:2px 5px;">
                           <el-tag type="primary">
                             {{ tag }}
                           </el-tag>
                         </div>
-
+                        </div>
                       </div>
                     </div>
-                    <div style="padding: 14px;margin-left: 60px">
-                      <span style="margin-bottom: 16px">{{ o.name }}</span>
-                      <div style="display:inline-grid">
+                    <div style="padding:30px  14px 0;">
+                      <span style="margin: 16px">{{ o.name }}</span>
+                      <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <span>{{ o.profile }}</span>
-                        <el-button type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
+                        <el-button type="primary" class="button" @click="getUserInfoById(o)">查看用户信息</el-button>
                       </div>
                     </div>
                   </el-card>
                 </div>
             </div>
-          </div>
-          <div class="block" height="1000px">
+          <div class="block" >
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
               :current-page="currentPage" :page-sizes="[5, 10, 15, 20]" :page-size="5"
               layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -66,11 +64,10 @@
         </el-main>
       </el-container>
     </div>
-  </div>
 </template>
 
 <script>
-import { userListByPage } from '@/api/user'
+import { userListByPage ,addFriendShip} from '@/api/user'
 import {mapState} from 'vuex'
 
 export default {
@@ -128,38 +125,30 @@ export default {
       this.total = resp.data.total
       this.list = resp.data.list
     },
-    getUserInfoById(id) {
+    async getUserInfoById(msg) {
+      console.log(msg);
       const h = this.$createElement;
         this.$msgbox({
           title: '添加好友',
           message: h('p', null, [
-            h('span', null, '内容可以是 '),
-            h('i', { style: 'color: teal' }, 'VNode')
+            h('span', null, '好友信息： '),
+            h('p', { style: 'color: gray' }, `${msg.profile}`)
           ]),
           showCancelButton: true,
-          showConfirmButton:id===1?false:true,
+          // showConfirmButton:id===1?false:true,
           confirmButtonText: '添加',
           cancelButtonText: '返回',
-          beforeClose: (action, instance, done) => {
+          beforeClose: async (action, instance, done) => {
             if (action === 'confirm') {
               instance.confirmButtonLoading = true;
-              instance.confirmButtonText = '执行中...';
-              setTimeout(() => {
-                done();
-                setTimeout(() => {
-                  instance.confirmButtonLoading = false;
-                }, 300);
-              }, 2000);
-            } else {
-              done();
+              // console.log(1);
+              instance.confirmButtonLoading = false;
+              const res =await addFriendShip(msg.id)
+              console.log(res);
             }
+            done()
           }
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: "添加成功"
-          });
-        },()=>{});
+        })
     }
   },
 
@@ -181,11 +170,7 @@ export default {
 }
 
 .button {
-  padding: 0;
-  float: right;
-  width: 120px;
-  height: 38px;
-  display: inline;
+  margin-top: 10px;
 }
 
 .image {
