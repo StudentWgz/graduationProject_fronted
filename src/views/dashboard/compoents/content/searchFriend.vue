@@ -32,7 +32,7 @@
                 <el-card class="card">
                   <div style="display: inline; margin-left: 5px; margin-right: 5px;">
                     <img :src="o.userAvatar
-                                          " class="image" alt="角色头像" />
+                      " class="image" alt="角色头像" />
                     <div style="height:100px">
                       <div style="margin-bottom: 2px;margin-left: 30%">
                         <p> {{ o.userName }} </p>
@@ -50,7 +50,10 @@
                     <span style="margin-bottom: 16px">{{ o.name }}</span>
                     <div style="display:inline-grid">
                       <span>{{ o.profile }}</span>
-                      <el-button type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
+                      <div style="display: inline-block">
+                        <el-button type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
+                        <el-button type="primary" class="button" @click="addUserById(o.id)">添加好友</el-button>
+                      </div>
                     </div>
                   </div>
                 </el-card>
@@ -70,8 +73,8 @@
 </template>
 
 <script>
-import { userListByPage } from '@/api/user'
-import {mapState} from 'vuex'
+import { userListByPage, addFriendShip } from '@/api/user'
+import { mapState } from 'vuex'
 
 export default {
   name: 'SearchFriend',
@@ -88,8 +91,8 @@ export default {
       input: ''
     }
   },
-  computed:{
-    ...mapState({userId:state=>state.user.userId})
+  computed: {
+    ...mapState({ userId: state => state.user.userId })
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -128,38 +131,39 @@ export default {
       this.total = resp.data.total
       this.list = resp.data.list
     },
-    getUserInfoById(id) {
+    addUserById(id) {
       const h = this.$createElement;
-        this.$msgbox({
-          title: '添加好友',
-          message: h('p', null, [
-            h('span', null, '内容可以是 '),
-            h('i', { style: 'color: teal' }, 'VNode')
-          ]),
-          showCancelButton: true,
-          showConfirmButton:id===1?false:true,
-          confirmButtonText: '添加',
-          cancelButtonText: '返回',
-          beforeClose: (action, instance, done) => {
-            if (action === 'confirm') {
-              instance.confirmButtonLoading = true;
-              instance.confirmButtonText = '执行中...';
-              setTimeout(() => {
-                done();
-                setTimeout(() => {
-                  instance.confirmButtonLoading = false;
-                }, 300);
-              }, 2000);
-            } else {
+      this.$msgbox({
+        title: '添加好友',
+        message: h('p', null, [
+          h('span', null, '是否添加该用户为好友 '),
+          h('i', { style: 'color: teal' }, '')
+        ]),
+        showCancelButton: true,
+        showConfirmButton: id === 1 ? false : true,
+        confirmButtonText: '添加',
+        cancelButtonText: '返回',
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true;
+            instance.confirmButtonText = '执行中...';
+            setTimeout(() => {
               done();
-            }
+              addFriendShip(id)
+              setTimeout(() => {
+                instance.confirmButtonLoading = false;
+              }, 300);
+            }, 2000);
+          } else {
+            done();
           }
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: "添加成功"
-          });
-        },()=>{});
+        }
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: "添加成功"
+        });
+      }, () => { });
     }
   },
 

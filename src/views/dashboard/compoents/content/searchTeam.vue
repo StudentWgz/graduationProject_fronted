@@ -28,7 +28,7 @@
         <el-main class="main">
           <el-input placeholder="搜索你感兴趣的队伍吧！" v-model="input" clearable style="width:25%;margin-bottom:2%">
           </el-input>
-          <el-button style="margin-left: 20px" @click="initTeam" type="primary">主要按钮</el-button>
+          <el-button style="margin-left: 20px" @click="initTeam" type="primary">查找队伍</el-button>
           <div style="display: inline">
             <div>
               <el-row style="display: inline-grid">
