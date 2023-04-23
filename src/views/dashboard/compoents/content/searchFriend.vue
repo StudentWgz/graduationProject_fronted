@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div style="height: 600px">
       <el-container>
         <el-aside style="width: 160px">
@@ -25,36 +25,36 @@
           <el-input placeholder="搜索感兴趣的人吧！" v-model="input" clearable style="width:25%;margin-bottom:2%">
           </el-input>
           <el-button style="margin-left: 20px" type="primary" @click="initUser">搜索</el-button>
-            <div>
-              <div style="display: flex; flex-wrap: wrap;">
-                <div    v-for="(o, index) in list" :key="index" >
-                  <!-- v-if="o.id!==userId" -->
-                  <el-card class="card" >
-                    <div style="display: inline; margin-left: 5px; margin-right: 5px;">
-                      <img :src="o.userAvatar
-                      " class="image" alt="角色头像" />
-                      <div style="height:100px">
-                        <div style="margin-bottom: 2px;margin-left: 30%">
-                          <p> {{ o.userName }} </p>
-                        </div>
-                        <div v-for="(tag, index) in o.tags" :key="index"
-                          style="display:inline-flex ;margin-right:10px;margin-left:10px">
-                          <el-tag type="primary">
-                            {{ tag }}
-                          </el-tag>
-                        </div>
+          <div>
+            <div style="display: flex; flex-wrap: wrap;">
+              <div v-for="(o, index) in list" :key="index">
+                <!-- v-if="o.id!==userId" -->
+                <el-card class="card">
+                  <div style="display: inline; margin-left: 5px; margin-right: 5px;">
+                    <img :src="o.userAvatar
+                                          " class="image" alt="角色头像" />
+                    <div style="height:100px">
+                      <div style="margin-bottom: 2px;margin-left: 30%">
+                        <p> {{ o.userName }} </p>
+                      </div>
+                      <div v-for="(tag, index) in o.tags" :key="index"
+                        style="display:inline-flex ;margin-right:10px;margin-left:10px">
+                        <el-tag type="primary">
+                          {{ tag }}
+                        </el-tag>
+                      </div>
 
-                      </div>
                     </div>
-                    <div style="padding: 14px;margin-left: 60px">
-                      <span style="margin-bottom: 16px">{{ o.name }}</span>
-                      <div style="display:inline-grid">
-                        <span>{{ o.profile }}</span>
-                        <el-button type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
-                      </div>
+                  </div>
+                  <div style="padding: 14px;margin-left: 60px">
+                    <span style="margin-bottom: 16px">{{ o.name }}</span>
+                    <div style="display:inline-grid">
+                      <span>{{ o.profile }}</span>
+                      <el-button type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
                     </div>
-                  </el-card>
-                </div>
+                  </div>
+                </el-card>
+              </div>
             </div>
           </div>
           <div class="block" height="1000px">
@@ -207,7 +207,8 @@ export default {
 
 .main {
   width: 80vw !important;
-  .card{
+
+  .card {
     width: 280px;
     margin-bottom: 20px;
     border-right-width: 5px;

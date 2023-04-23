@@ -76,3 +76,11 @@ export function getChatRecord(id) {
     params: { friendId: id }
   })
 }
+// 添加好友
+export function addFriendShip(id) {
+  return request({
+    url: '/user/addFriendShip',
+    method: 'post',
+    params: { friendId: id }
+  })
+}
