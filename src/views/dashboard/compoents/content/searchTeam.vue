@@ -1,5 +1,6 @@
 <template>
-    <div >
+  <div style="height: 1000px">
+    <div style="height: 600px">
       <el-container>
         <el-aside style="width: 160px">
           <!-- 左边导航栏 -->
@@ -27,62 +28,69 @@
         <el-main class="main">
           <el-input placeholder="搜索你感兴趣的队伍吧！" v-model="input" clearable style="width:25%;margin-bottom:2%">
           </el-input>
-          <el-button style="margin-left: 20px" @click="initTeam" type="primary">主要按钮</el-button>
-          <div v-for="(o, index) in this.list" :key="index" style="margin-bottom:15px">
-            <el-card >
-              <div class="card-header">
-                <div style="line-height: 30px;">{{ o.name }}</div>
-                <div style="display:flex;">
-                  <div v-for="(url, index) in o.joinUrlList" :key="index">
-                    <el-avatar :src="url"></el-avatar>
-                  </div>
-                </div>
-                <div>
-                  <el-tag type="warning" style="margin-top: 6px;position:absolute;right:120px">
-                    队伍人数:{{ o.nowNum }}/{{ o.maxNum }}
-                  </el-tag>
-                </div>
-              </div>
-              <div class="card-content">
-                <img :src="o.avatarUrl" class="image" alt="我坤哥" />
-                <div style="margin-left: 10px;">
-                  <div style="margin-bottom: 2px">
-                    <el-tag type="success"> {{ o.description }} </el-tag>
-                  </div>
-                  <div style="display:inline-block;">
-                    <div style="float:left">
-                      <el-table height="40" style="width: 100%;">
-                        <el-table-column prop="" label="队长" width="180" style="color: red;">
-                        </el-table-column>
-                        <el-table-column prop="" label="创建时间" width="180">
-                        </el-table-column>
-                        <el-table-column prop="" label="截止时间" width="180">
-                        </el-table-column>
-                      </el-table>
-                      <el-table height="50" style="width: 100%">
-                        <el-table-column prop="o.createname" :label="o.createName" width="180">
-                        </el-table-column>
-                        <el-table-column prop="" :label="o.createTime" width="180">
-                        </el-table-column>
-                        <el-table-column prop="" :label="o.expireTime" width="180">
-                        </el-table-column>
-                      </el-table>
+          <el-button style="margin-left: 20px" @click="initTeam" type="primary">查找队伍</el-button>
+          <div style="display: inline">
+            <div>
+              <el-row style="display: inline-grid">
+                <el-col :span="8" v-for="(o, index) in this.list" :key="index">
+                  <el-card :body-style="{ padding: '0px' }">
+                    <div style="display: flex;width: 100%;">
+                      <span>{{ o.name }}</span>
+                      <div style="display:flex;float:left;display: flex;float: left;margin-left: 650px;">
+                        <div v-for="(url, index) in o.joinUrlList" :key="index">
+                          <el-avatar :src="url"></el-avatar>
+                        </div>
+                      </div>
+                      <div style="float:right">
+                        <el-tag type="warning" style="margin-top: 6px;position:absolute;right:20px">
+                          队伍人数:{{ o.nowNum }}/{{ o.maxNum }}
+                        </el-tag>
+                      </div>
+                      <el-divider></el-divider>
                     </div>
-                    <div style="padding: 20px;">
-                      <div class=" ">
-                        <el-button type="primary" class="button">查看队伍</el-button>
+                    <div style="display: flex; ">
+                      <img :src="o.avatarUrl" class="image" alt="我坤哥" />
+                      <div>
+                        <div style="margin-bottom: 2px">
+                          <el-tag type="success"> {{ o.description }} </el-tag>
+                        </div>
+                        <div style="display:inline-block;">
+                          <div style="float:left">
+                            <el-table height="50" border style="width: 100%">
+                              <el-table-column prop="" label="队长" width="180">
+                              </el-table-column>
+                              <el-table-column prop="" label="创建时间" width="180">
+                              </el-table-column>
+                              <el-table-column prop="" label="截止时间" width="180">
+                              </el-table-column>
+                            </el-table>
+                            <el-table height="50" border style="width: 100%">
+                              <el-table-column prop="o.createname" :label="o.createName" width="180">
+                              </el-table-column>
+                              <el-table-column prop="" :label="o.createTime" width="180">
+                              </el-table-column>
+                              <el-table-column prop="" :label="o.expireTime" width="180">
+                              </el-table-column>
+                            </el-table>
+                          </div>
+                          <div style="padding: 20px;float:right">
+                            <div class="bottom clearfix">
+                              <el-button type="primary" class="button">查看队伍</el-button>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
-                  </div>
 
-                </div>
-              </div>
-
-            </el-card>
+                  </el-card>
+                </el-col>
+              </el-row>
+            </div>
           </div>
           <div class="block"
-            height="100px
-          zzzzzz                                                                                                                                                                                                                                                                                                                                                                                                                                              ">
+            height="1000px
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
               :current-page="currentPage" :page-sizes="[6, 9, 15, 21]" :page-size="6"
               layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -91,6 +99,7 @@
         </el-main>
       </el-container>
     </div>
+  </div>
 </template>
 
 <script>
@@ -164,25 +173,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.main {
-  margin-left: 35px;
-  margin-right: 35px;
-
-  .card-header {
-    display: flex;
-    border-bottom: 1px solid rgb(216, 216, 216);
-    align-items: start;
-    padding-bottom: 10px;
-    justify-content: space-between;
-  }
-
-  .card-content {
-    padding-top: 20px;
-    display: flex;
-  }
-}
-
+<style scoped>
 .el-col-8 {
   width: 1500px;
 }
@@ -209,7 +200,7 @@ export default {
   width: 120px;
   height: 38px;
   position: absolute;
-  right: 120px
+  right: 20px
 }
 
 .image {
@@ -229,5 +220,10 @@ export default {
 
 .clearfix:after {
   clear: both;
+}
+
+.main {
+  margin-left: 35px;
+  margin-right: 35px;
 }
 </style>

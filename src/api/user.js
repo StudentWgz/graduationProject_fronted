@@ -61,7 +61,7 @@ export async function getUserListByIdsUsingPOST(data) {
     data
   });
 }
-// 获取在线朋友
+// 获取在线用户
 export function getAllUsers() {
   return request({
     url: '/user/getFriendShipOfInline',
