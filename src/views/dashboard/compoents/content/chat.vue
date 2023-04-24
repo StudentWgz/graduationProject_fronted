@@ -31,7 +31,6 @@
             </el-popover>
           </div>
         </el-card>
-
       </el-aside>
 
       <el-main style="padding: 0">
@@ -48,7 +47,7 @@
                   <el-avatar :size="50" :src="toUser.friendAvatarUrl" />
                   <span style="margin-left: 5px">{{ toUser.friendName }}</span>
                 </div>
-                <el-button type="info" @click="getHistoryMessage(toUser)">获取历史消息</el-button>
+                <el-button type="primary" @click.once="getHistoryMessage(toUser)">获取历史消息</el-button>
               </div>
             </el-card>
           </div>
@@ -169,6 +168,7 @@ export default {
         const im = JSON.parse(msg.data)
         if (msg.data.includes("userName")) {
           this.messages.push(im)
+          this.scroll()
         }
       }
     },
@@ -221,7 +221,7 @@ export default {
       // this.messages.push(messages)
       this.text = null
       this.client.send(JSON.stringify(messages));
-      this.scroll()
+      // this.scroll()
     },
     // getMsg() {
     //   // 当收到消息
