@@ -196,7 +196,6 @@ export default {
       this.scroll()
     },
     sendMsg() {
-
       console.log('currentUser.id', this.currentUser.id, 'toUser.friendId', this.toUser.friendId)
 
       if (!this.text.trim()) {

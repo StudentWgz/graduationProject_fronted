@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="height: 600px">
+    <div>
       <el-container>
         <el-aside style="width: 160px">
           <!-- 左边导航栏 -->
@@ -50,9 +50,9 @@
                     <span style="margin-bottom: 16px">{{ o.name }}</span>
                     <div style="display:inline-grid">
                       <span>{{ o.profile }}</span>
-                      <div style="display: inline-block">
-                        <el-button type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
-                        <el-button type="primary" class="button" @click="addUserById(o.id)">添加好友</el-button>
+                      <div >
+                        <el-button style="display: inline-block" type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
+                        <el-button style="display: inline-block" type="primary" class="button" @click="addUserById(o.id)">添加好友</el-button>
                       </div>
                     </div>
                   </div>

@@ -39,6 +39,7 @@ export function logout() {
 }
 
 export function userListByPage(data) {
+  console.log(11,data);
   return request({
     url: '/user/userListByPage',
     method: 'post',

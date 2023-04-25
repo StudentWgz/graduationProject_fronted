@@ -40,19 +40,18 @@ export default {
     ...mapState({ userId: state => state.user.userId })
   },
   mounted() {
+    console.log(1);
     this.getUserList()
   },
   methods: {
     async getUserList() {
       const userListPageDTO={
-        "pagNum":1,
-        "pageSize":1,
+        pageNum:1,
+        pageSize:6,
       }
-      const res=await userListByPage(suserListPageDTO)
+      const res=await userListByPage(userListPageDTO)
       console.log(res);
     }
   }
 }
 </script>
-
-<style scoped></style>
