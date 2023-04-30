@@ -46,13 +46,13 @@
 
                     </div>
                   </div>
-                  <div style="padding: 14px;margin-left: 60px">
-                    <span style="margin-bottom: 16px">{{ o.name }}</span>
-                    <div style="display:inline-grid">
-                      <span>{{ o.profile }}</span>
-                      <div >
-                        <el-button style="display: inline-block" type="primary" class="button" @click="getUserInfoById(o.id)">查看用户信息</el-button>
-                        <el-button style="display: inline-block" type="primary" class="button" @click="addUserById(o.id)">添加好友</el-button>
+                  <div style="display: flex;flex-direction: column;justify-content: center; align-items: center;">
+                    <div style="margin-bottom: 16px">{{ o.userName }}</div>
+                    <div>
+                      <div style="padding: 10px 0;">{{ o.profile }}11</div>
+                      <div>
+                        <el-button type="primary" @click="getUserInfoById(o.id)">查看信息</el-button>
+                        <el-button type="primary" @click="addUserById(o.id)">添加好友</el-button>
                       </div>
                     </div>
                   </div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { userListByPage, addFriendShip } from '@/api/user'
+import { userListByPage, addFriendShip ,showUserById} from '@/api/user'
 import { mapState } from 'vuex'
 
 export default {
@@ -137,7 +137,6 @@ export default {
         title: '添加好友',
         message: h('p', null, [
           h('span', null, '是否添加该用户为好友 '),
-          h('i', { style: 'color: teal' }, '')
         ]),
         showCancelButton: true,
         showConfirmButton: id === 1 ? false : true,
@@ -158,12 +157,34 @@ export default {
             done();
           }
         }
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: "添加成功"
-        });
-      }, () => { });
+      })
+    },
+    async getUserInfoById(id){
+      const res= await showUserById(id)
+      const {userName,userAccount,userPhone,gender,profile,createTime,userRole,tagList}=res.data
+      const h = this.$createElement;
+      this.$msgbox({
+        // title: '查看用户信息',
+        message: h('div', { style: 'width:800px;height:350px' }, [
+          h('h3', null, '用户基本信息： '),
+          h('h5', null, `用户名：${userName}`),
+          h('h5', null, `性别：${gender}`),
+          h('h5', null, `手机号：${userPhone}`),
+          h('h5', null, `邮箱号：${userAccount}`),
+          h('h5', null, `介绍：${profile}`),
+          h('h5', null, `角色：${userRole}`),
+          h('h5', null, `创建时间：${createTime}`),
+          // h('h5', null, `ta创建的队伍：${createTime}`),
+          // h('h5', null, `ta加入的队伍：${createTime}`),
+        ]),
+        showCancelButton: true,
+        showConfirmButton:   false,
+        // confirmButtonText: '添加',
+        cancelButtonText: '返回',
+        beforeClose: (action, instance, done) => {
+            done();
+        }
+      })
     }
   },
 
@@ -174,6 +195,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .time {
   font-size: 13px;
   color: #999;
@@ -222,5 +244,13 @@ export default {
 
 .el-col-8 {
   width: 20%;
+}
+>>>.el-message-box{
+  width: 600px;
+  background-color: red;
+}
+::v-deep .el-message-box{
+  width: 600px;
+  background-color: red;
 }
 </style>
